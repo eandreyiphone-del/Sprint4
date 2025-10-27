@@ -1,17 +1,33 @@
 package Pages;
 
-import org.hamcrest.MatcherAssert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import static org.hamcrest.CoreMatchers.is;
-import static ScooterTest.Locators.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OrderPageScooter {
 
     private WebDriver driver;
 
-    public OrderPageScooter(WebDriver driver){
+    // Приватные локаторы
+    private final By ORDER_HEADER = By.xpath(".//div[text()='Для кого самокат']");
+    private final By ABOUT_ORDER_HEADER = By.xpath(".//div[text()='Про аренду']");
+    private final By ACCEPT_COOKIE_BUTTON = By.xpath(".//button[text()='да все привыкли']");
+    private final By NAME_FIELD = By.xpath(".//input[@placeholder='* Имя']");
+    private final By SURNAME_FIELD = By.xpath(".//input[@placeholder='* Фамилия']");
+    private final By ADDRESS_FIELD = By.xpath(".//input[@placeholder='* Адрес: куда привезти заказ']");
+    private final By SUBWAY_FIELD = By.xpath(".//input[@placeholder='* Станция метро']");
+    private final By PHONE_NUMBER_FIELD = By.xpath(".//input[@placeholder='* Телефон: на него позвонит курьер']");
+    private final By ORDER_NEXT_BUTTON = By.xpath(".//button[text()='Далее']");
+    private final By DATE_FIELD = By.xpath(".//input[@placeholder='* Когда привезти самокат']");
+    private final By RENTAL_PERIOD_FIELD = By.xpath(".//div[@class='Dropdown-placeholder']");
+    private final By COMMENT_FIELD = By.xpath(".//input[@placeholder='Комментарий для курьера']");
+    private final By ORDER_CREATE_BUTTON = By.xpath("//div[contains(@class,'Order_Buttons')]/button[text()='Заказать']");
+    private final By ORDER_CONFIRM_BUTTON = By.xpath(".//button[text()='Да']");
+    private final By CONFIRM_HEADER = By.xpath(".//button[text()='Посмотреть статус']");
+
+    public OrderPageScooter(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -27,7 +43,7 @@ public class OrderPageScooter {
 
     // Метод для проверки открытия страницы
     public void isPageOpen(String headerText, String text) {
-        MatcherAssert.assertThat(headerText, is(text));
+        assertThat(headerText, is(text));
     }
 
     // Метод для принятия куки
