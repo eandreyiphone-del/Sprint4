@@ -2,9 +2,14 @@ package Pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import java.time.Duration;
+
+import static org.junit.Assert.assertEquals;
 
 public class OrderPageScooter {
 
@@ -38,12 +43,14 @@ public class OrderPageScooter {
 
     // Геттер для получения текста на кнопке для просмотра статуса заказа
     public String getConfirmHeader() {
-        return driver.findElement(CONFIRM_HEADER).getText();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement confirmButton = wait.until(ExpectedConditions.elementToBeClickable(CONFIRM_HEADER));
+        return confirmButton.getText();
     }
 
     // Метод для проверки открытия страницы
     public void isPageOpen(String headerText, String text) {
-        assertThat(headerText, is(text));
+        assertEquals(headerText, text);
     }
 
     // Метод для принятия куки
@@ -66,10 +73,20 @@ public class OrderPageScooter {
         driver.findElement(ADDRESS_FIELD).sendKeys(address);
     }
 
-    // Метод для заполнения поля * Станция метро
+    // Метод для выбора станции метро
     public void setSubway(String subway) {
-        driver.findElement(SUBWAY_FIELD).click();
-        driver.findElement(By.xpath(".//div[text()='"+subway+"']")).click();
+        // Ожидаем кликабельность поля ввода станций метро
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement selectField = wait.until(ExpectedConditions.elementToBeClickable(SUBWAY_FIELD));
+        selectField.click();
+
+        // Ожидаем кликабельность конкретного пункта списка станций
+        WebElement option = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(".//div[text()='" + subway + "']")));
+
+        // Перемещаем мышь к элементу и кликаем
+        Actions actions = new Actions(driver);
+        actions.moveToElement(option).perform();
+        option.click();
     }
 
     // Метод для заполнения поля * Телефон: на него позвонит курьер
@@ -77,39 +94,39 @@ public class OrderPageScooter {
         driver.findElement(PHONE_NUMBER_FIELD).sendKeys(phoneNumber);
     }
 
-    // Метод для перехода ко второй странице создания заказа
+    // Переходим к следующей странице заказа
     public void clickOrderNextButton() {
         driver.findElement(ORDER_NEXT_BUTTON).click();
     }
 
-    // Метод для заполнения поля * Когда привезти самокат
+    // Устанавливаем дату доставки
     public void setDate(String date) {
         driver.findElement(DATE_FIELD).sendKeys(date);
     }
 
-    // Метод для заполнения поля Срок аренды
+    // Выбираем срок аренды
     public void setRentalPeriod(String rentalPeriod) {
         driver.findElement(ABOUT_ORDER_HEADER).click();
         driver.findElement(RENTAL_PERIOD_FIELD).click();
-        driver.findElement(By.xpath(".//div[text()='"+rentalPeriod+"']")).click();
+        driver.findElement(By.xpath(".//div[text()='" + rentalPeriod + "']")).click();
     }
 
-    // Метод для заполнения поля Цвет самоката
+    // Выбор цвета самоката
     public void setColor(String color) {
-        driver.findElement(By.xpath(".//label[text()='"+color+"']")).click();
+        driver.findElement(By.xpath(".//label[text()='" + color + "']")).click();
     }
 
-    // Метод для заполнения поля Комментарий для курьера
+    // Заполнение комментария для курьера
     public void setComment(String comment) {
         driver.findElement(COMMENT_FIELD).sendKeys(comment);
     }
 
-    // Метод для перехода к подтверждению заказа
+    // Подтверждение заказа
     public void clickOrderCreateButton() {
         driver.findElement(ORDER_CREATE_BUTTON).click();
     }
 
-    // Метод для подтверждения заказа
+    // Окончательное подтверждение заказа
     public void clickOrderConfirmButton() {
         driver.findElement(ORDER_CONFIRM_BUTTON).click();
     }

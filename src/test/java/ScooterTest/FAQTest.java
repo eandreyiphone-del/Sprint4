@@ -8,7 +8,6 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.Arrays;
@@ -22,12 +21,12 @@ public class FAQTest {
 
     private WebDriver driver;
     private By question;
-    private By answer;
+    private By answerLocator;
     private String expectedText;
 
-    public FAQTest(By question, By answer, String expectedText) {
+    public FAQTest(By question, By answerLocator, String expectedText) {
         this.question = question;
-        this.answer = answer;
+        this.answerLocator = answerLocator;
         this.expectedText = expectedText;
     }
 
@@ -50,20 +49,20 @@ public class FAQTest {
         driver = new ChromeDriver();
         driver.get("https://qa-scooter.praktikum-services.ru");
 
-        WebElement closeCookiePopupButton = driver.findElement(By.id("rcc-confirm-button"));
-        closeCookiePopupButton.click();
-
-        WebElement tableFAQ = driver.findElement(By.className("accordion"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", tableFAQ);
-
+        // Экземпляр страницы и прокрутка до первого вопроса
         HomePageScooter objHomePage = new HomePageScooter(driver);
+        objHomePage.scrollToFirstQuestion();
+
+        // Клик на указанный вопрос
         objHomePage.clickQuestion(question);
-        String actualAnswer = objHomePage.getAnswer(answer);
+
+        // Извлекаем ответ и проверяем его
+        String actualAnswer = objHomePage.getAnswer(answerLocator);
         assertThat(actualAnswer, is(expectedText));
     }
 
     @After
     public void teardown() {
             driver.quit();
-        }
     }
+}

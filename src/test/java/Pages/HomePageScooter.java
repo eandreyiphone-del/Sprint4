@@ -5,14 +5,11 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 public class HomePageScooter {
 
     private WebDriver driver;
 
-    // Приватные локаторы для вопросов и ответов
+    // Локаторы для вопросов и ответов
     private final By QUESTION_PRICE_AND_PAYMENT = By.xpath(".//div[@class='accordion__item'][1]");
     private final By QUESTION_MULTIPLE_SCOOTERS = By.xpath(".//div[@class='accordion__item'][2]");
     private final By QUESTION_RENTAL_TIME = By.xpath(".//div[@class='accordion__item'][3]");
@@ -22,7 +19,7 @@ public class HomePageScooter {
     private final By QUESTION_CANCEL_ORDER = By.xpath(".//div[@class='accordion__item'][7]");
     private final By QUESTION_OUTSIDE_MKAD = By.xpath(".//div[@class='accordion__item'][8]");
 
-    // Приватные локаторы для ответов
+    // Локаторы для ответов
     private final By ANSWER_PRICE_AND_PAYMENT = By.id("accordion__panel-0");
     private final By ANSWER_MULTIPLE_SCOOTERS = By.id("accordion__panel-1");
     private final By ANSWER_RENTAL_TIME = By.id("accordion__panel-2");
@@ -32,7 +29,7 @@ public class HomePageScooter {
     private final By ANSWER_CANCEL_ORDER = By.id("accordion__panel-6");
     private final By ANSWER_OUTSIDE_MKAD = By.id("accordion__panel-7");
 
-    // Локаторы для кнопок заказа
+    // Локаторы для кнопок оформления заказа
     private final By HEADER_ORDER_BUTTON = By.xpath(".//button[text()='Заказать'][1]");
     private final By PAGE_ORDER_BUTTON = By.xpath(".//div[contains(@class, 'Home_FinishButton')]/button");
 
@@ -40,7 +37,7 @@ public class HomePageScooter {
         this.driver = driver;
     }
 
-    // Геттеры для вопросов
+    // Методы для возврата локаторов вопросов
     public By getQuestionPriceAndPayment() {
         return QUESTION_PRICE_AND_PAYMENT;
     }
@@ -73,7 +70,7 @@ public class HomePageScooter {
         return QUESTION_OUTSIDE_MKAD;
     }
 
-    // Геттеры для ответов
+    // Методы для возврата локаторов ответов
     public By getAnswerPriceAndPayment() {
         return ANSWER_PRICE_AND_PAYMENT;
     }
@@ -106,21 +103,31 @@ public class HomePageScooter {
         return ANSWER_OUTSIDE_MKAD;
     }
 
+    // Клик на вопрос
     public void clickQuestion(By question) {
         driver.findElement(question).click();
     }
 
+    // Получить текст ответа
     public String getAnswer(By answer) {
         return driver.findElement(answer).getText();
     }
 
+    // Новый метод для прокрутки до первого вопроса
+    public void scrollToFirstQuestion() {
+        WebElement firstQuestion = driver.findElement(getQuestionPriceAndPayment());
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", firstQuestion);
+    }
+
+    // Метод для клика кнопки заказа сверху страницы
     public void clickHeaderOrderButton() {
         driver.findElement(HEADER_ORDER_BUTTON).click();
     }
 
+    // Метод для клика большой кнопки заказа снизу страницы
     public void clickPageOrderButton() {
-        WebElement bigButton = driver.findElement(PAGE_ORDER_BUTTON);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", bigButton);
+        WebElement button = driver.findElement(PAGE_ORDER_BUTTON);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", button);
         driver.findElement(PAGE_ORDER_BUTTON).click();
     }
 }
